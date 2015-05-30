@@ -20,6 +20,7 @@
         <activity android:name=".activities.RecyclerCoordinatorActivity"/>
         <activity android:name=".activities.CollapsingToolbarScrollViewActivity"/>
         <activity android:name=".activities.CollapsingToolbarContainerActivity"/>
+        <activity android:name=".activities.ViewpagerCoordinatorActivity"/>
     </application>
 
 </manifest>

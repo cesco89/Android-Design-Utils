@@ -11,6 +11,7 @@ Classes:
 - BaseCollapsingScrollViewActivity -> Activity with NestedScrollView where you can inflate your custom views
 - BaseCoordinatorContainerActivity -> Activity with scrolling toolbar and where you have to inflate your custom fragment
 - BaseRecyclerCoordinatorActivity -> Activity with scrolling toolbar that uses RecyclerView, you have to pass you custom RecyclerView Adapter
+- BaseCoordinatorViewpagerActivity -> Activity with prebuilt ViewPager and TabLayout, you need to provide your FragmentPagerAdapter and OnPageChangeListener
 
 How To:
 -------

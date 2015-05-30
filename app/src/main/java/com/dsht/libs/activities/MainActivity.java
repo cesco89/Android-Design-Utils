@@ -47,5 +47,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, CollapsingToolbarContainerActivity.class));
       }
     });
+    ((Button)findViewById(R.id.btn5)).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        startActivity(new Intent(MainActivity.this, ViewpagerCoordinatorActivity.class));
+      }
+    });
   }
 }
