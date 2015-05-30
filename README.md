@@ -16,4 +16,4 @@ How To:
 -------
 You class must extend one of the classes listed above and implement all the abstract methods.
 
-
+See the sample app project.
