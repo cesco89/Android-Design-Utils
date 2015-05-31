@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import dsht.com.ui.utils.R;
 
@@ -24,6 +25,7 @@ public abstract class BaseRecyclerCoordinatorActivity<AdapterType extends Recycl
   private AppBarLayout appbar;
   private RecyclerView recycler;
   private LayoutInflater inflater;
+  private FrameLayout pinnedContainer;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public abstract class BaseRecyclerCoordinatorActivity<AdapterType extends Recycl
     coordinator = (CoordinatorLayout) findViewById(R.id.coordinator);
     appbar = (AppBarLayout) findViewById(R.id.appbar);
     recycler = (RecyclerView) findViewById(R.id.recycler);
+    pinnedContainer = (FrameLayout) findViewById(R.id.pinned_container);
     inflater = this.getLayoutInflater();
   }
 
@@ -44,7 +47,9 @@ public abstract class BaseRecyclerCoordinatorActivity<AdapterType extends Recycl
     setupToolbar(toolbar);
 
     if(getPinnedAppbarView(inflater) != null) {
-      appbar.addView(getPinnedAppbarView(inflater));
+      pinnedContainer.addView(getPinnedAppbarView(inflater));
+    }else{
+      pinnedContainer.setVisibility(View.GONE);
     }
 
     if(getRecyclerViewLayoutParams() != null) {

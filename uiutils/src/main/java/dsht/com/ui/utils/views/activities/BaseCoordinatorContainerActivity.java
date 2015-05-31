@@ -21,6 +21,7 @@ public abstract class BaseCoordinatorContainerActivity<FragmentType extends Frag
   private AppBarLayout appbar;
   private FrameLayout container;
   private LayoutInflater inflater;
+  private FrameLayout pinnedContainer;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public abstract class BaseCoordinatorContainerActivity<FragmentType extends Frag
     coordinator = (CoordinatorLayout) findViewById(R.id.coordinator);
     appbar = (AppBarLayout) findViewById(R.id.appbar);
     container = (FrameLayout) findViewById(R.id.container);
+    pinnedContainer = (FrameLayout) findViewById(R.id.pinned_container);
     inflater = this.getLayoutInflater();
   }
 
@@ -40,7 +42,9 @@ public abstract class BaseCoordinatorContainerActivity<FragmentType extends Frag
     super.onPostCreate(savedInstanceState);
     setupToolbar(toolbar);
     if(getPinnedAppbarView(inflater) != null) {
-      appbar.addView(getPinnedAppbarView(inflater));
+      pinnedContainer.addView(getPinnedAppbarView(inflater));
+    }else{
+      pinnedContainer.setVisibility(View.GONE);
     }
 
     setInitialFragment(R.id.container);

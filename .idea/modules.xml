@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Libs.iml" filepath="$PROJECT_DIR$/Libs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/sample.iml" filepath="$PROJECT_DIR$/app/sample.iml" />
       <module fileurl="file://$PROJECT_DIR$/uiutils/uiutils.iml" filepath="$PROJECT_DIR$/uiutils/uiutils.iml" />
     </modules>
