@@ -70,4 +70,10 @@ public class CollapsingToolbarScrollViewActivity extends BaseCollapsingScrollVie
   protected void setFabImage(FloatingActionButton fab) {
     fab.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_favorite).color(Color.WHITE));
   }
+
+  @Override
+  protected boolean fabAutoHide() {
+    //We don't need to hide it!
+    return false;
+  }
 }

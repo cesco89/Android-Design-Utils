@@ -93,6 +93,11 @@ public class ViewpagerCoordinatorActivity extends BaseCoordinatorViewPagerActivi
   }
 
   @Override
+  protected boolean fabAutoHide() {
+    return true;
+  }
+
+  @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_main, menu);
     return true;

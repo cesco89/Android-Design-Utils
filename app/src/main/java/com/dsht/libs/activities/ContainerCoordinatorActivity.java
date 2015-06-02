@@ -54,4 +54,10 @@ public class ContainerCoordinatorActivity extends BaseCoordinatorContainerActivi
   protected void setFabImage(FloatingActionButton fab) {
     //same here!
   }
+
+  @Override
+  protected boolean fabAutoHide() {
+    //No fab!
+    return false;
+  }
 }

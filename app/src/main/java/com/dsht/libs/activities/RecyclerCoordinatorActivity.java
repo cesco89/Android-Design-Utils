@@ -85,6 +85,11 @@ public class RecyclerCoordinatorActivity extends BaseRecyclerCoordinatorActivity
     fab.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).color(Color.WHITE));
   }
 
+  @Override
+  protected boolean fabAutoHide() {
+    return false;
+  }
+
   private ArrayList buildSampleItems() {
     ArrayList<String> items = new ArrayList<>();
     for (int i = 0; i<100; i++) {

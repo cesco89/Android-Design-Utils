@@ -63,4 +63,9 @@ public class CollapsingToolbarContainerActivity extends BaseCollapsingContainerA
   protected void setFabImage(FloatingActionButton fab) {
     fab.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_share).color(Color.WHITE));
   }
+
+  @Override
+  protected boolean fabAutoHide() {
+    return false;
+  }
 }

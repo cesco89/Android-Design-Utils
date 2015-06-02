@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 import dsht.com.ui.utils.R;
+import dsht.com.ui.utils.views.utils.ScrollAwareFABBehavior;
 
 /**
  * Created by francesco on 30/05/15.
@@ -102,8 +103,14 @@ public abstract class BaseCollapsingScrollViewActivity<ViewType extends View> ex
       fabParams.anchorGravity = (Gravity.RIGHT | Gravity.END | Gravity.BOTTOM);
     }else if (position == FabPosition.BOTTOM_LEFT) {
       fabParams.gravity = (Gravity.BOTTOM | Gravity.LEFT);
+      if(fabAutoHide()) {
+        fabParams.setBehavior(new ScrollAwareFABBehavior(this));
+      }
     }else if (position == FabPosition.BOTTOM_RIGHT) {
       fabParams.gravity = (Gravity.BOTTOM | Gravity.RIGHT);
+      if(fabAutoHide()) {
+        fabParams.setBehavior(new ScrollAwareFABBehavior(this));
+      }
     }
     fab.setLayoutParams(fabParams);
   }
@@ -123,4 +130,6 @@ public abstract class BaseCollapsingScrollViewActivity<ViewType extends View> ex
   protected abstract void onFabClick(View v);
 
   protected abstract void setFabImage(FloatingActionButton fab);
+
+  protected abstract boolean fabAutoHide();
 }
