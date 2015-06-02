@@ -22,6 +22,7 @@ android {
 dependencies {
     compile 'com.android.support:cardview-v7:22.2.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.mikepenz:iconics:1.0.1@aar'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':uiutils')
 }

@@ -1,6 +1,8 @@
 package com.dsht.libs.activities;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,8 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dsht.libs.R;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 
@@ -58,6 +63,26 @@ public class RecyclerCoordinatorActivity extends BaseRecyclerCoordinatorActivity
   protected View getPinnedAppbarView(LayoutInflater inflater) {
     View pinned = inflater.inflate(R.layout.pinned_appbar_sample, null, false);
     return pinned;
+  }
+
+  @Override
+  protected FabPosition getFabPosition() {
+    return FabPosition.TOP_LEFT;
+  }
+
+  @Override
+  protected FabSize getFabSize() {
+    return FabSize.FAB_MINI;
+  }
+
+  @Override
+  protected void onFabClick(View v) {
+    Toast.makeText(this, "TEST!", Toast.LENGTH_SHORT).show();
+  }
+
+  @Override
+  protected void setFabImage(FloatingActionButton fab) {
+    fab.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).color(Color.WHITE));
   }
 
   private ArrayList buildSampleItems() {

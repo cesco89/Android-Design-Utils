@@ -1,5 +1,8 @@
 package com.dsht.libs.activities;
 
+import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -7,10 +10,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.dsht.libs.R;
 import com.dsht.libs.fragments.SampleFragment;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.typeface.FontAwesome;
 
 import java.util.ArrayList;
 
@@ -62,6 +69,27 @@ public class ViewpagerCoordinatorActivity extends BaseCoordinatorViewPagerActivi
 
       }
     };
+  }
+
+  @Override
+  protected FabPosition getFabPosition() {
+    return FabPosition.BOTTOM_RIGHT;
+  }
+
+  @Override
+  protected FabSize getFabSize() {
+    return FabSize.FAB_NORMAL;
+  }
+
+  @Override
+  protected void onFabClick(View v) {
+    Snackbar.make(v, "Snakbar Test!", Snackbar.LENGTH_LONG)
+        .setAction("Action!", null).show();
+  }
+
+  @Override
+  protected void setFabImage(FloatingActionButton fab) {
+    fab.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_check).color(Color.WHITE));
   }
 
   @Override

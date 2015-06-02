@@ -3,11 +3,13 @@ package dsht.com.ui.utils.views.activities;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,21 @@ public abstract class BaseRecyclerCoordinatorActivity<AdapterType extends Recycl
   private RecyclerView recycler;
   private LayoutInflater inflater;
   private FrameLayout pinnedContainer;
+  private FloatingActionButton fab;
+  private CoordinatorLayout.LayoutParams fabParams;
+
+  public enum FabPosition {
+    TOP_LEFT,
+    TOP_RIGHT,
+    BOTTOM_LEFT,
+    BOTTOM_RIGHT
+  }
+
+  public enum FabSize {
+    FAB_NORMAL,
+    FAB_MINI,
+    NONE
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +56,24 @@ public abstract class BaseRecyclerCoordinatorActivity<AdapterType extends Recycl
     recycler = (RecyclerView) findViewById(R.id.recycler);
     pinnedContainer = (FrameLayout) findViewById(R.id.pinned_container);
     inflater = this.getLayoutInflater();
+
+    if(getFabSize() == FabSize.FAB_NORMAL) {
+      fab = (FloatingActionButton) inflater.inflate(R.layout.base_fab_normal, null);
+    }else if(getFabSize() == FabSize.FAB_MINI) {
+      fab = (FloatingActionButton) inflater.inflate(R.layout.base_fab_mini, null);
+    }
+
+    if(fab != null) {
+      coordinator.addView(fab);
+      fabParams = new CoordinatorLayout.LayoutParams(fab.getLayoutParams());
+      int fabMargin = getResources().getDimensionPixelSize(R.dimen.fab_margin);
+      fabParams.setMargins(fabMargin, fabMargin, fabMargin, fabMargin);
+      setFabPos(getFabPosition());
+      fab.setOnClickListener(c -> onFabClick(fab));
+      setFabImage(fab);
+    }
+
+
   }
 
   @Override
@@ -67,6 +102,26 @@ public abstract class BaseRecyclerCoordinatorActivity<AdapterType extends Recycl
     if(getRecyclerAdapter() != null) {
       recycler.setAdapter(getRecyclerAdapter());
     }
+
+  }
+
+  public void setFabPosition(FabPosition position) {
+    setFabPos(position);
+  }
+
+  private void setFabPos(FabPosition position) {
+    if(position == FabPosition.TOP_LEFT) {
+      fabParams.setAnchorId(R.id.appbar);
+      fabParams.anchorGravity = (Gravity.START | Gravity.LEFT | Gravity.BOTTOM);
+    }else if (position == FabPosition.TOP_RIGHT) {
+      fabParams.setAnchorId(R.id.appbar);
+      fabParams.anchorGravity = (Gravity.RIGHT | Gravity.END | Gravity.BOTTOM);
+    }else if (position == FabPosition.BOTTOM_LEFT) {
+      fabParams.gravity = (Gravity.BOTTOM | Gravity.LEFT);
+    }else if (position == FabPosition.BOTTOM_RIGHT) {
+      fabParams.gravity = (Gravity.BOTTOM | Gravity.RIGHT);
+    }
+    fab.setLayoutParams(fabParams);
   }
 
   public AdapterType getAdapter() {
@@ -92,5 +147,13 @@ public abstract class BaseRecyclerCoordinatorActivity<AdapterType extends Recycl
   protected abstract ViewGroup.LayoutParams getRecyclerViewLayoutParams();
 
   protected abstract View getPinnedAppbarView(LayoutInflater inflater);
+
+  protected abstract FabPosition getFabPosition();
+
+  protected abstract FabSize getFabSize();
+
+  protected abstract void onFabClick(View v);
+
+  protected abstract void setFabImage(FloatingActionButton fab);
 
 }

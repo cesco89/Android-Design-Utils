@@ -2,9 +2,12 @@ package dsht.com.ui.utils.views.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,9 +26,25 @@ public abstract class BaseCollapsingScrollViewActivity<ViewType extends View> ex
 
   private Toolbar toolbar;
   private CollapsingToolbarLayout collapsingToolbar;
+  private CoordinatorLayout coordinator;
   private LinearLayout contentContainer;
   private LayoutInflater inflater;
   private ImageView backdrop;
+  private FloatingActionButton fab;
+  private CoordinatorLayout.LayoutParams fabParams;
+
+  public enum FabPosition {
+    TOP_LEFT,
+    TOP_RIGHT,
+    BOTTOM_LEFT,
+    BOTTOM_RIGHT
+  }
+
+  public enum FabSize {
+    FAB_NORMAL,
+    FAB_MINI,
+    NONE
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +54,25 @@ public abstract class BaseCollapsingScrollViewActivity<ViewType extends View> ex
     setSupportActionBar(toolbar);
     contentContainer = (LinearLayout) findViewById(R.id.content_container);
     collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+    coordinator = (CoordinatorLayout) findViewById(R.id.coordinator);
     backdrop = (ImageView) findViewById(R.id.backdrop);
     inflater = getLayoutInflater();
+
+    if(getFabSize() == FabSize.FAB_NORMAL) {
+      fab = (FloatingActionButton) inflater.inflate(R.layout.base_fab_normal, null);
+    }else if(getFabSize() == FabSize.FAB_MINI) {
+      fab = (FloatingActionButton) inflater.inflate(R.layout.base_fab_mini, null);
+    }
+
+    if(fab != null) {
+      coordinator.addView(fab);
+      fabParams = new CoordinatorLayout.LayoutParams(fab.getLayoutParams());
+      int fabMargin = getResources().getDimensionPixelSize(R.dimen.fab_margin);
+      fabParams.setMargins(fabMargin, fabMargin, fabMargin, fabMargin);
+      setFabPos(getFabPosition());
+      fab.setOnClickListener(c -> onFabClick(fab));
+      setFabImage(fab);
+    }
   }
 
   @Override
@@ -53,6 +89,25 @@ public abstract class BaseCollapsingScrollViewActivity<ViewType extends View> ex
 
   }
 
+  public void setFabPosition(FabPosition position) {
+    setFabPos(position);
+  }
+
+  private void setFabPos(FabPosition position) {
+    if(position == FabPosition.TOP_LEFT) {
+      fabParams.setAnchorId(R.id.appbar);
+      fabParams.anchorGravity = (Gravity.START | Gravity.LEFT | Gravity.BOTTOM);
+    }else if (position == FabPosition.TOP_RIGHT) {
+      fabParams.setAnchorId(R.id.appbar);
+      fabParams.anchorGravity = (Gravity.RIGHT | Gravity.END | Gravity.BOTTOM);
+    }else if (position == FabPosition.BOTTOM_LEFT) {
+      fabParams.gravity = (Gravity.BOTTOM | Gravity.LEFT);
+    }else if (position == FabPosition.BOTTOM_RIGHT) {
+      fabParams.gravity = (Gravity.BOTTOM | Gravity.RIGHT);
+    }
+    fab.setLayoutParams(fabParams);
+  }
+
   protected abstract void setupToolbar(Toolbar toolbar);
 
   protected abstract List<ViewType> addChildViews(LayoutInflater inflater);
@@ -60,4 +115,12 @@ public abstract class BaseCollapsingScrollViewActivity<ViewType extends View> ex
   protected abstract void setBackdropImage(ImageView backdrop);
 
   protected abstract String getCollapsingToolbarTitle();
+
+  protected abstract FabPosition getFabPosition();
+
+  protected abstract FabSize getFabSize();
+
+  protected abstract void onFabClick(View v);
+
+  protected abstract void setFabImage(FloatingActionButton fab);
 }

@@ -1,11 +1,14 @@
 package com.dsht.libs.activities;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import com.dsht.libs.R;
 import com.dsht.libs.fragments.SampleFragment;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import dsht.com.ui.utils.views.activities.BaseCoordinatorContainerActivity;
 
@@ -20,7 +23,7 @@ public class ContainerCoordinatorActivity extends BaseCoordinatorContainerActivi
 
   @Override
   protected View getPinnedAppbarView(LayoutInflater inflater) {
-    return inflater.inflate(R.layout.pinned_appbar_sample, null, false);
+    return null;
   }
 
   @Override
@@ -29,5 +32,26 @@ public class ContainerCoordinatorActivity extends BaseCoordinatorContainerActivi
         .beginTransaction()
         .replace(containerID, new SampleFragment())
         .commit();
+  }
+
+  @Override
+  protected FabPosition getFabPosition() {
+    return null;
+  }
+
+  @Override
+  protected FabSize getFabSize() {
+    //This thime we don't want fab!
+    return FabSize.NONE;
+  }
+
+  @Override
+  protected void onFabClick(View v) {
+    //Nothing to do here!
+  }
+
+  @Override
+  protected void setFabImage(FloatingActionButton fab) {
+    //same here!
   }
 }
