@@ -1,5 +1,7 @@
 package dsht.com.ui.utils.views.activities;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 import dsht.com.ui.utils.R;
+import dsht.com.ui.utils.views.utils.FabBuilder;
 import dsht.com.ui.utils.views.utils.ScrollAwareFABBehavior;
 
 /**
@@ -31,21 +34,6 @@ public abstract class BaseCollapsingScrollViewActivity<ViewType extends View> ex
   private LinearLayout contentContainer;
   private LayoutInflater inflater;
   private ImageView backdrop;
-  private FloatingActionButton fab;
-  private CoordinatorLayout.LayoutParams fabParams;
-
-  public enum FabPosition {
-    TOP_LEFT,
-    TOP_RIGHT,
-    BOTTOM_LEFT,
-    BOTTOM_RIGHT
-  }
-
-  public enum FabSize {
-    FAB_NORMAL,
-    FAB_MINI,
-    NONE
-  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -59,21 +47,16 @@ public abstract class BaseCollapsingScrollViewActivity<ViewType extends View> ex
     backdrop = (ImageView) findViewById(R.id.backdrop);
     inflater = getLayoutInflater();
 
-    if(getFabSize() == FabSize.FAB_NORMAL) {
-      fab = (FloatingActionButton) inflater.inflate(R.layout.base_fab_normal, null);
-    }else if(getFabSize() == FabSize.FAB_MINI) {
-      fab = (FloatingActionButton) inflater.inflate(R.layout.base_fab_mini, null);
-    }
-
-    if(fab != null) {
-      coordinator.addView(fab);
-      fabParams = new CoordinatorLayout.LayoutParams(fab.getLayoutParams());
-      int fabMargin = getResources().getDimensionPixelSize(R.dimen.fab_margin);
-      fabParams.setMargins(fabMargin, fabMargin, fabMargin, fabMargin);
-      setFabPos(getFabPosition());
-      fab.setOnClickListener(c -> onFabClick(fab));
-      setFabImage(fab);
-    }
+    new FabBuilder(this)
+        .withAnchorId(R.id.appbar)
+        .withAutoHide(fabAutoHide())
+        .withCoordinatorLayout(coordinator)
+        .withImageDrawable(getFabImageAsDrawable())
+        .withImageBitmap(getFabImageAsBitmap())
+        .withOnClickListener(getOnFabClickListener())
+        .withPosition(getFabPosition())
+        .withSize(getFabSize())
+        .build();
   }
 
   @Override
@@ -90,30 +73,6 @@ public abstract class BaseCollapsingScrollViewActivity<ViewType extends View> ex
 
   }
 
-  public void setFabPosition(FabPosition position) {
-    setFabPos(position);
-  }
-
-  private void setFabPos(FabPosition position) {
-    if(position == FabPosition.TOP_LEFT) {
-      fabParams.setAnchorId(R.id.appbar);
-      fabParams.anchorGravity = (Gravity.START | Gravity.LEFT | Gravity.BOTTOM);
-    }else if (position == FabPosition.TOP_RIGHT) {
-      fabParams.setAnchorId(R.id.appbar);
-      fabParams.anchorGravity = (Gravity.RIGHT | Gravity.END | Gravity.BOTTOM);
-    }else if (position == FabPosition.BOTTOM_LEFT) {
-      fabParams.gravity = (Gravity.BOTTOM | Gravity.LEFT);
-      if(fabAutoHide()) {
-        fabParams.setBehavior(new ScrollAwareFABBehavior(this));
-      }
-    }else if (position == FabPosition.BOTTOM_RIGHT) {
-      fabParams.gravity = (Gravity.BOTTOM | Gravity.RIGHT);
-      if(fabAutoHide()) {
-        fabParams.setBehavior(new ScrollAwareFABBehavior(this));
-      }
-    }
-    fab.setLayoutParams(fabParams);
-  }
 
   protected abstract void setupToolbar(Toolbar toolbar);
 
@@ -123,13 +82,17 @@ public abstract class BaseCollapsingScrollViewActivity<ViewType extends View> ex
 
   protected abstract String getCollapsingToolbarTitle();
 
-  protected abstract FabPosition getFabPosition();
+  protected abstract FabBuilder.FabPosition getFabPosition();
 
-  protected abstract FabSize getFabSize();
+  protected abstract FabBuilder.FabSize getFabSize();
 
-  protected abstract void onFabClick(View v);
+  protected abstract View.OnClickListener getOnFabClickListener();
 
-  protected abstract void setFabImage(FloatingActionButton fab);
+  protected abstract Drawable getFabImageAsDrawable();
+
+  protected abstract Bitmap getFabImageAsBitmap();
 
   protected abstract boolean fabAutoHide();
+
+
 }

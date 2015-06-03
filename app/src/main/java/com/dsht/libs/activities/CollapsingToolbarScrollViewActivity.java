@@ -1,6 +1,8 @@
 package com.dsht.libs.activities;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dsht.com.ui.utils.views.activities.BaseCollapsingScrollViewActivity;
+import dsht.com.ui.utils.views.utils.FabBuilder;
 
 /**
  * Created by francesco on 30/05/15.
@@ -52,24 +55,35 @@ public class CollapsingToolbarScrollViewActivity extends BaseCollapsingScrollVie
   }
 
   @Override
-  protected FabPosition getFabPosition() {
-    return FabPosition.TOP_RIGHT;
+  protected FabBuilder.FabPosition getFabPosition() {
+    return FabBuilder.FabPosition.TOP_RIGHT;
   }
 
   @Override
-  protected FabSize getFabSize() {
-    return FabSize.FAB_NORMAL;
+  protected FabBuilder.FabSize getFabSize() {
+    return FabBuilder.FabSize.FAB_NORMAL;
   }
 
   @Override
-  protected void onFabClick(View v) {
-    Toast.makeText(this, "TEST!", Toast.LENGTH_SHORT).show();
+  protected View.OnClickListener getOnFabClickListener() {
+    return new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Toast.makeText(CollapsingToolbarScrollViewActivity.this, "TEST!", Toast.LENGTH_SHORT).show();
+      }
+    };
   }
 
   @Override
-  protected void setFabImage(FloatingActionButton fab) {
-    fab.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_favorite).color(Color.WHITE));
+  protected Drawable getFabImageAsDrawable() {
+    return new IconicsDrawable(this, GoogleMaterial.Icon.gmd_airplanemode_on).color(Color.WHITE);
   }
+
+  @Override
+  protected Bitmap getFabImageAsBitmap() {
+    return null;
+  }
+
 
   @Override
   protected boolean fabAutoHide() {

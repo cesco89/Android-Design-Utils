@@ -1,6 +1,8 @@
 package com.dsht.libs.activities;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -22,6 +24,7 @@ import com.mikepenz.iconics.typeface.FontAwesome;
 import java.util.ArrayList;
 
 import dsht.com.ui.utils.views.activities.BaseCoordinatorViewPagerActivity;
+import dsht.com.ui.utils.views.utils.FabBuilder;
 
 /**
  * Created by francesco on 30/05/15.
@@ -72,24 +75,44 @@ public class ViewpagerCoordinatorActivity extends BaseCoordinatorViewPagerActivi
   }
 
   @Override
-  protected FabPosition getFabPosition() {
-    return FabPosition.BOTTOM_RIGHT;
+  protected boolean toolbarAutoHide() {
+    return false;
   }
 
   @Override
-  protected FabSize getFabSize() {
-    return FabSize.FAB_NORMAL;
+  protected boolean tabsAutoHide() {
+    return true;
   }
 
   @Override
-  protected void onFabClick(View v) {
-    Snackbar.make(v, "Snakbar Test!", Snackbar.LENGTH_LONG)
-        .setAction("Action!", null).show();
+  protected FabBuilder.FabPosition getFabPosition() {
+    return FabBuilder.FabPosition.BOTTOM_RIGHT;
   }
 
   @Override
-  protected void setFabImage(FloatingActionButton fab) {
-    fab.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_check).color(Color.WHITE));
+  protected FabBuilder.FabSize getFabSize() {
+    return FabBuilder.FabSize.FAB_NORMAL;
+  }
+
+  @Override
+  protected View.OnClickListener getOnFabClickListener() {
+    return new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Snackbar.make(v, "TEST!", Snackbar.LENGTH_SHORT)
+            .setAction("ACTION", null).show();
+      }
+    };
+  }
+
+  @Override
+  protected Drawable getFabImageAsDrawable() {
+    return new IconicsDrawable(this, GoogleMaterial.Icon.gmd_movie).color(Color.WHITE);
+  }
+
+  @Override
+  protected Bitmap getFabImageAsBitmap() {
+    return null;
   }
 
   @Override

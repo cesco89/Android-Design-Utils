@@ -1,5 +1,7 @@
 package dsht.com.ui.utils.views.activities;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import dsht.com.ui.utils.R;
+import dsht.com.ui.utils.views.utils.FabBuilder;
 import dsht.com.ui.utils.views.utils.ScrollAwareFABBehavior;
 
 /**
@@ -29,21 +32,8 @@ public abstract class BaseRecyclerCoordinatorActivity<AdapterType extends Recycl
   private RecyclerView recycler;
   private LayoutInflater inflater;
   private FrameLayout pinnedContainer;
-  private FloatingActionButton fab;
-  private CoordinatorLayout.LayoutParams fabParams;
-
-  public enum FabPosition {
-    TOP_LEFT,
-    TOP_RIGHT,
-    BOTTOM_LEFT,
-    BOTTOM_RIGHT
-  }
-
-  public enum FabSize {
-    FAB_NORMAL,
-    FAB_MINI,
-    NONE
-  }
+  private AppBarLayout.LayoutParams toolbarParams;
+  private AppBarLayout.LayoutParams pinnedViewParams;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -57,23 +47,30 @@ public abstract class BaseRecyclerCoordinatorActivity<AdapterType extends Recycl
     recycler = (RecyclerView) findViewById(R.id.recycler);
     pinnedContainer = (FrameLayout) findViewById(R.id.pinned_container);
     inflater = this.getLayoutInflater();
+    toolbarParams = new AppBarLayout.LayoutParams(toolbar.getLayoutParams());
+    pinnedViewParams = new AppBarLayout.LayoutParams(pinnedContainer.getLayoutParams());
 
-    if(getFabSize() == FabSize.FAB_NORMAL) {
-      fab = (FloatingActionButton) inflater.inflate(R.layout.base_fab_normal, null);
-    }else if(getFabSize() == FabSize.FAB_MINI) {
-      fab = (FloatingActionButton) inflater.inflate(R.layout.base_fab_mini, null);
+    if(!toolbarAutoHide()) {
+      toolbarParams.setScrollFlags(0);
+      toolbar.setLayoutParams(toolbarParams);
     }
 
-    if(fab != null) {
-      coordinator.addView(fab);
-      fabParams = new CoordinatorLayout.LayoutParams(fab.getLayoutParams());
-      int fabMargin = getResources().getDimensionPixelSize(R.dimen.fab_margin);
-      fabParams.setMargins(fabMargin, fabMargin, fabMargin, fabMargin);
-      setFabPos(getFabPosition());
-      fab.setOnClickListener(c -> onFabClick(fab));
-      setFabImage(fab);
+    if(!pinnedViewAutoHide()) {
+      pinnedViewParams.setScrollFlags(0);
+      pinnedContainer.setLayoutParams(pinnedViewParams);
+
     }
 
+    new FabBuilder(this)
+        .withAnchorId(R.id.appbar)
+        .withAutoHide(fabAutoHide())
+        .withCoordinatorLayout(coordinator)
+        .withImageDrawable(getFabImageAsDrawable())
+        .withImageBitmap(getFabImageAsBitmap())
+        .withOnClickListener(getOnFabClickListener())
+        .withPosition(getFabPosition())
+        .withSize(getFabSize())
+        .build();
 
   }
 
@@ -106,30 +103,6 @@ public abstract class BaseRecyclerCoordinatorActivity<AdapterType extends Recycl
 
   }
 
-  public void setFabPosition(FabPosition position) {
-    setFabPos(position);
-  }
-
-  private void setFabPos(FabPosition position) {
-    if(position == FabPosition.TOP_LEFT) {
-      fabParams.setAnchorId(R.id.appbar);
-      fabParams.anchorGravity = (Gravity.START | Gravity.LEFT | Gravity.BOTTOM);
-    }else if (position == FabPosition.TOP_RIGHT) {
-      fabParams.setAnchorId(R.id.appbar);
-      fabParams.anchorGravity = (Gravity.RIGHT | Gravity.END | Gravity.BOTTOM);
-    }else if (position == FabPosition.BOTTOM_LEFT) {
-      fabParams.gravity = (Gravity.BOTTOM | Gravity.LEFT);
-      if(fabAutoHide()) {
-        fabParams.setBehavior(new ScrollAwareFABBehavior(this));
-      }
-    }else if (position == FabPosition.BOTTOM_RIGHT) {
-      fabParams.gravity = (Gravity.BOTTOM | Gravity.RIGHT);
-      if(fabAutoHide()) {
-        fabParams.setBehavior(new ScrollAwareFABBehavior(this));
-      }
-    }
-    fab.setLayoutParams(fabParams);
-  }
 
   public AdapterType getAdapter() {
     return (AdapterType) recycler.getAdapter();
@@ -155,13 +128,19 @@ public abstract class BaseRecyclerCoordinatorActivity<AdapterType extends Recycl
 
   protected abstract View getPinnedAppbarView(LayoutInflater inflater);
 
-  protected abstract FabPosition getFabPosition();
+  protected abstract boolean toolbarAutoHide();
 
-  protected abstract FabSize getFabSize();
+  protected abstract boolean pinnedViewAutoHide();
 
-  protected abstract void onFabClick(View v);
+  protected abstract FabBuilder.FabPosition getFabPosition();
 
-  protected abstract void setFabImage(FloatingActionButton fab);
+  protected abstract FabBuilder.FabSize getFabSize();
+
+  protected abstract View.OnClickListener getOnFabClickListener();
+
+  protected abstract Drawable getFabImageAsDrawable();
+
+  protected abstract Bitmap getFabImageAsBitmap();
 
   protected abstract boolean fabAutoHide();
 

@@ -1,7 +1,9 @@
 package com.dsht.libs.activities;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +22,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import java.util.ArrayList;
 
 import dsht.com.ui.utils.views.activities.BaseRecyclerCoordinatorActivity;
+import dsht.com.ui.utils.views.utils.FabBuilder;
 
 
 public class RecyclerCoordinatorActivity extends BaseRecyclerCoordinatorActivity {
@@ -66,28 +69,49 @@ public class RecyclerCoordinatorActivity extends BaseRecyclerCoordinatorActivity
   }
 
   @Override
-  protected FabPosition getFabPosition() {
-    return FabPosition.TOP_LEFT;
+  protected boolean toolbarAutoHide() {
+    return true;
   }
 
   @Override
-  protected FabSize getFabSize() {
-    return FabSize.FAB_MINI;
+  protected boolean pinnedViewAutoHide() {
+    return false;
   }
 
   @Override
-  protected void onFabClick(View v) {
-    Toast.makeText(this, "TEST!", Toast.LENGTH_SHORT).show();
+  protected FabBuilder.FabPosition getFabPosition() {
+    return FabBuilder.FabPosition.TOP_LEFT;
   }
 
   @Override
-  protected void setFabImage(FloatingActionButton fab) {
-    fab.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).color(Color.WHITE));
+  protected FabBuilder.FabSize getFabSize() {
+    return FabBuilder.FabSize.FAB_MINI;
   }
+
+  @Override
+  protected View.OnClickListener getOnFabClickListener() {
+    return new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Toast.makeText(RecyclerCoordinatorActivity.this, "TEST!", Toast.LENGTH_SHORT).show();
+      }
+    };
+  }
+
+  @Override
+  protected Drawable getFabImageAsDrawable() {
+    return new IconicsDrawable(this, GoogleMaterial.Icon.gmd_favorite_outline).color(Color.WHITE);
+  }
+
+  @Override
+  protected Bitmap getFabImageAsBitmap() {
+    return null;
+  }
+
 
   @Override
   protected boolean fabAutoHide() {
-    return false;
+    return true;
   }
 
   private ArrayList buildSampleItems() {
